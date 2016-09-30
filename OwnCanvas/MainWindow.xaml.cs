@@ -48,5 +48,16 @@ namespace OwnCanvas
         {
            
         }
+
+        private void Thumb_OnDragDelta(object sender, DragDeltaEventArgs e)
+        {
+            var node = ((Thumb) sender).DataContext as Node;
+            var pos = node.Position;
+            pos.X += e.HorizontalChange;
+            pos.Y += e.VerticalChange;
+            node.Position = pos;
+            myCanvas.InvalidateVisual();
+
+        }
     }
 }

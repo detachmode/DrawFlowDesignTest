@@ -32,14 +32,14 @@
                 </ItemsControl.ItemContainerStyle>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Thumb>
+                        <Thumb DragDelta="Thumb_OnDragDelta">
                             <Thumb.Template>
                                 <ControlTemplate>
-                                    <Grid>
+                                    <Grid Margin="10,-8,0,0">
                                         <Ellipse  Margin="-10"  Fill="Aqua"/>
                                         <TextBlock Text="Hallo Welt"></TextBlock>
                                     </Grid>
-                                    
+                                  
                                 </ControlTemplate>
                             </Thumb.Template>
 
