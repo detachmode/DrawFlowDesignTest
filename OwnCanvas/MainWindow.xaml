@@ -6,47 +6,58 @@
         xmlns:local="clr-namespace:OwnCanvas"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
-         MouseDown="Window_MouseDown"
-      
+        AllowDrop="True"
+        DragOver="MainWindow_OnDragOver"
+        MouseDown="Window_MouseDown"
+
         Background="Transparent"
         Title="MainWindow" Height="400" Width="600">
     <Window.DataContext>
-        <local:MyCanvasViewModel/>
+        <local:MyCanvasViewModel />
     </Window.DataContext>
     <Grid>
-        <!--<Button Width="100" Height="21" VerticalAlignment="Top" Click="ButtonBase_OnClick">Test</Button>-->
-        <StackPanel Background="#FF817E7E">
-        <Label Name="lblInfo1" Content="Info 1"/>
-        <Label Name="lblInfo2" Content="Info 2"/>
-        </StackPanel>
-        <!--<local:MyCanvas x:Name="myCanvas">-->
-          
-            <ItemsControl Name="itemContainer" ItemsSource="{Binding Nodes}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Canvas />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemContainerStyle>
-                    <Style>
-                        <Setter Property="Canvas.Left"
-                                Value="{Binding Position.X}">
-                        </Setter>
-                        <Setter Property="Canvas.Top"
-                                Value="{Binding Position.Y}">
-                        </Setter>
-                    </Style>
-                </ItemsControl.ItemContainerStyle>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Thumb DragDelta="Thumb_OnDragDelta">
 
+        <ItemsControl ItemsSource="{Binding Connections}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <local:Pointer FillColor="White" Start="{Binding Start.Position}" End="{Binding End.Position}"
+                                   ArrowSize="30,15" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
 
-                            <Thumb.Template>
-                                <ControlTemplate>
-                                    <Grid Margin="10,-8,0,0">
-                                        <Ellipse  Margin="-10,-20"  Fill="#FF484848" Stroke="#FF3B6DE5" 
-                                                    AllowDrop="True" DragOver="Window_DragOver"
+        <ItemsControl Name="itemContainer" ItemsSource="{Binding Nodes}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemContainerStyle>
+                <Style>
+                    <Setter Property="Canvas.Left"
+                            Value="{Binding Position.X}" />
+                    <Setter Property="Canvas.Top"
+                            Value="{Binding Position.Y}" />
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Thumb Margin="0,-30,0,0" DragDelta="Thumb_OnDragDelta">
+                        <Thumb.Template>
+                            <ControlTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="40*" />
+                                        <ColumnDefinition Width="40*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid Margin="20" Grid.ColumnSpan="2">
+                                        <Ellipse Margin="-20" Fill="#FF484848" Stroke="White" 
+                                                  
                                                   StrokeThickness="3">
                                             <!--<i:Interaction.Behaviors>
                                                 <local:SelectAble/>
@@ -55,102 +66,22 @@
                                         </Ellipse>
                                         <TextBox Text="Hallo Welt" Foreground="White" BorderBrush="{x:Null}" Background="{x:Null}"></TextBox>
                                     </Grid>
-
-                                </ControlTemplate>
-                            </Thumb.Template>
-
-                        </Thumb>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-
-            <!--<TextBox RenderTransformOrigin="0.5,0.5">
-                <TextBox.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform/>
-                        <SkewTransform/>
-                        <RotateTransform Angle="0"/>
-                        <TranslateTransform/>
-                    </TransformGroup>
-                </TextBox.RenderTransform> Hello
-            </TextBox>-->
-        
-        <ItemsControl ItemsSource="{Binding Connections}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <Canvas />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <!--<ItemsControl.ItemContainerStyle>
-                <Style>
-                    <Setter Property="Canvas.Left"
-                                Value="{Binding }">
-                    </Setter>
-                    <Setter Property="Canvas.Top"
-                                Value="{Binding Center.Y}">
-                    </Setter>
-                </Style>
-            </ItemsControl.ItemContainerStyle>-->
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <local:Pointer FillColor="DeepSkyBlue" ArrowSize="20,10" End="{Binding End.Position}" 
-                                    Start="{Binding Start.Position}" >
-                    </local:Pointer>
+                                    <Rectangle Grid.Column="0"
+                                               Fill="Transparent"
+                                               IsHitTestVisible="True"
+                                               AllowDrop="True"
+                                               PreviewDragOver="softwareCell_DragOver"
+                                               DragOver="softwareCell_DragOver"
+                                               DragLeave="SoftwareCell_DragLeave"
+                                               Drop="SoftwareCell_Drop"
+                                               PreviewDrop="SoftwareCell_Drop" />
+                                </Grid>
+                            </ControlTemplate>
+                        </Thumb.Template>
+                    </Thumb>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-               
-                <!--<ItemsControl Name="itemContainer2" ItemsSource="{Binding Connections}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Canvas />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemContainerStyle>
-                    <Style>
-                        <Setter Property="Canvas.Left"
-                                Value="{Binding Center.X}">
-                        </Setter>
-                        <Setter Property="Canvas.Top"
-                                Value="{Binding Center.Y}">
-                        </Setter>
-                    </Style>
-                </ItemsControl.ItemContainerStyle>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Thumb DragDelta="Thumb_OnDragDelta" RenderTransformOrigin="0.5,0.5">
-                            <Thumb.RenderTransform>
-                                <TransformGroup>
-                                    <ScaleTransform/>
-                                    <SkewTransform/>
-                                    <RotateTransform Angle="{Binding AngleText}" 
-                                                     />
-                                    <TranslateTransform/>
-                                </TransformGroup>
-                            </Thumb.RenderTransform>
-                            <Thumb.Template>
-                                <ControlTemplate>
-                                    <TextBox Text="{Binding Name}" BorderBrush="{x:Null}" 
-                                             Margin="0,-20,0,0"
-                                             Background="#B2000000" Foreground="White"></TextBox>
-                                </ControlTemplate>
-                            </Thumb.Template>
-                        </Thumb>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>-->
 
-
-
-            <!--<Thumb Canvas.Left ="{Binding P1.X }" Canvas.Top ="{Binding P1.Y}"  DragDelta="OnDragDelta" >
-                <Thumb.Template >
-                    <ControlTemplate>
-                        <Ellipse Height="20" Width="20" Fill="AliceBlue"></Ellipse>
-                    </ControlTemplate>
-                </Thumb.Template>
-            </Thumb>--><!--
-
-        </local:MyCanvas>-->
     </Grid>
 </Window>
-

@@ -81,8 +81,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MouseHoverBehavior.cs" />
-    <Compile Include="MyCanvas.cs" />
     <Compile Include="MyCanvasViewModel.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

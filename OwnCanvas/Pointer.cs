@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq.Expressions;
 using System.Runtime.InteropServices.ComTypes;
 using System.Windows;
 using System.Windows.Controls;
@@ -32,7 +33,7 @@ namespace OwnCanvas
         private readonly TextBox txtBox;
 
         private readonly double connectionExtensionLength = 100;
-        private static Pointer IsDragging;
+        private static bool IsDragging;
 
         public Pointer()
         {
@@ -53,8 +54,42 @@ namespace OwnCanvas
             
             ArrowShape.MouseDown += (sender, args) =>
             {
-                DragDrop.DoDragDrop((DependencyObject) args.Source, this, DragDropEffects.Copy);
+                ArrowShape.IsHitTestVisible = false;
+                PathShape.IsHitTestVisible = false;
+                IsDragging = true;
+                (DataContext as PointerViewModel).IsDragging = true;
+                try
+                {
+                    (DataContext as PointerViewModel).End = null;
+                    DragDrop.DoDragDrop((DependencyObject) args.Source, this, DragDropEffects.Move);
+                }
+                catch
+                {
+                    // ignored
+                }
+                (DataContext as PointerViewModel).IsDragging = false;
+                IsDragging = false;
+                ArrowShape.IsHitTestVisible = true;
+                PathShape.IsHitTestVisible = true;
+
             };
+
+           
+
+            ArrowShape.MouseEnter += (sender, args) =>
+            {
+                ArrowShape.Fill = Brushes.Red;
+            };
+
+            ArrowShape.MouseLeave += (sender, args) =>
+            {
+                if (IsDragging) return;
+                ArrowShape.Fill = FillColor;
+            };
+
+
+
+
 
             txtBox = new TextBox();
 
@@ -107,7 +142,7 @@ namespace OwnCanvas
             set { SetValue(FillColorProperty, value); }
         }
 
-
+        
 
         private void Update()
         {
