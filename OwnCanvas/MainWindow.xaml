@@ -93,7 +93,7 @@
             </ItemsControl.ItemContainerStyle>-->
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <local:Pointer  ArrowSize="20,10" End="{Binding End.Position}" 
+                    <local:Pointer FillColor="DeepSkyBlue" ArrowSize="20,10" End="{Binding End.Position}" 
                                     Start="{Binding Start.Position}" >
                     </local:Pointer>
                 </DataTemplate>

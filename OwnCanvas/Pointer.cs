@@ -21,8 +21,11 @@ namespace OwnCanvas
         public static readonly DependencyProperty StartProperty =
             DependencyProperty.Register("Start", typeof(Point), typeof(Pointer));
 
-    //    public static readonly DependencyProperty TextBoxProperty =
-    //DependencyProperty.Register("TextBox", typeof(ContentPresenter), typeof(Pointer));
+        public static readonly DependencyProperty FillColorProperty =
+         DependencyProperty.Register("FillColor", typeof(SolidColorBrush), typeof(Pointer));
+
+        //    public static readonly DependencyProperty TextBoxProperty =
+        //DependencyProperty.Register("TextBox", typeof(ContentPresenter), typeof(Pointer));
 
         private readonly Path ArrowShape;
         private readonly Path PathShape;
@@ -33,17 +36,18 @@ namespace OwnCanvas
 
         public Pointer()
         {
+
             PathShape = new Path
             {
-                Stroke = Brushes.Red,
+                Stroke = FillColor,
                 StrokeThickness = 3
             };
 
             ArrowShape = new Path
             {
-                Stroke = Brushes.Red,
-                Fill = Brushes.Red,               
-               StrokeThickness = 3
+                Stroke = FillColor,
+                Fill = FillColor,               
+                StrokeThickness = 0
 
             };
             
@@ -51,16 +55,6 @@ namespace OwnCanvas
             {
                 DragDrop.DoDragDrop((DependencyObject) args.Source, this, DragDropEffects.Copy);
             };
-            //ArrowShape.MouseDown += (sender, args) => IsDragging = this;
-            //ArrowShape.MouseUp += (sender, args) => IsDragging = null;
-            //ArrowShape.MouseMove += (sender, args) =>
-            //{
-            //    //if (IsDragging && args.LeftButton == MouseButtonState.Pressed)
-            //    //{
-
-            //    //    Debug.WriteLine("drag");
-            //    //}
-            //};
 
             txtBox = new TextBox();
 
@@ -81,6 +75,9 @@ namespace OwnCanvas
                 .FromProperty(ArrowSizeProperty, typeof(Pointer))
                 .AddValueChanged(this, (s, e) => Update());
 
+            DependencyPropertyDescriptor
+                .FromProperty(FillColorProperty, typeof(Pointer))
+                .AddValueChanged(this, (s, e) => Update());
 
             //path.GetPointAtFractionLength(0.5, out centerPoint, out tg);
         }
@@ -104,16 +101,20 @@ namespace OwnCanvas
             set { SetValue(ArrowSizeProperty, value); }
         }
 
+        public SolidColorBrush FillColor
+        {
+            get { return (SolidColorBrush)GetValue(FillColorProperty); }
+            set { SetValue(FillColorProperty, value); }
+        }
 
-        //public ContentPresenter TextBox
-        //{
-        //    get { return (ContentPresenter)GetValue(TextBoxProperty); }
-        //    set { SetValue(TextBoxProperty, value); }
-        //}
 
 
         private void Update()
         {
+            ArrowShape.Stroke = FillColor;
+            ArrowShape.Fill = FillColor;
+            PathShape.Stroke = FillColor;
+
             var end = End;
             var start = Start;
 
