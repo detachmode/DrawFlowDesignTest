@@ -18,8 +18,8 @@ namespace OwnCanvas
 
             Nodes = new ObservableCollection<Node>();
            
-            AddNewAndConnect(0, 0, 100, 100);
-            AddNewAndConnect(100, 200, 300, 200);
+            addNewAndConnect(0, 0, 100, 100);
+            addNewAndConnect(100, 200, 300, 200);
             Connections.Add(new PointerViewModel(Nodes[1], Nodes[2]));
            
 
@@ -40,7 +40,7 @@ namespace OwnCanvas
         public ObservableCollection<PointerViewModel> Connections { get; set; }
 
 
-        private Node AddNew(double x, double y)
+        private Node addNew(double x, double y)
         {
             var n1 = new Node(new Point(x, y));
             Nodes.Add(n1);
@@ -48,10 +48,10 @@ namespace OwnCanvas
         }
 
 
-        private void AddNewAndConnect(double x1, double y1, double x2, double y2)
+        private void addNewAndConnect(double x1, double y1, double x2, double y2)
         {
-            var n1 = AddNew(x1, y1);
-            var n2 = AddNew(x2, y2);
+            var n1 = addNew(x1, y1);
+            var n2 = addNew(x2, y2);
             var c1 = new PointerViewModel(n1, n2);
            
             Connections.Add(c1);
@@ -59,13 +59,20 @@ namespace OwnCanvas
 
         private void connection_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName != "IsDragging") return;
+            if (e.PropertyName != "IsDragging") return; 
             var vm = (sender as PointerViewModel);
-            if (vm.IsDragging) return;
+
+            // as long as an connection is dragged around don't change the Collections
+            if (vm.IsDragging) return; 
+
+            MaybeRemoveConnection(vm);
+        }
+
+
+        private void MaybeRemoveConnection(PointerViewModel vm)
+        {
             if (vm.End == null)
-            {
                 this.Connections.Remove(vm);
-            }
         }
     }
 
