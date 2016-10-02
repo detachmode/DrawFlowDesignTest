@@ -38,15 +38,18 @@ namespace OwnCanvas
         }
 
 
-        private void UIElement_OnMouseMove(object sender, MouseEventArgs e)
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            
+            //DragDrop.DoDragDrop((DependencyObject)e.Source, "Sample", DragDropEffects.Copy);
         }
 
-
-        private void OnDragDelta(object sender, DragDeltaEventArgs e)
+        private void Window_DragOver(object sender, DragEventArgs e)
         {
-           
+            System.Windows.Point p1 = Mouse.GetPosition(this);
+            lblInfo1.Content = string.Format("Mouse.GetPosition: {0}, {1}", p1.X, p1.Y);
+
+            System.Windows.Point p2 = e.GetPosition(this);
+            lblInfo2.Content = string.Format("DragEventArgs.GetPosition: {0}, {1}", p2.X, p2.Y);
         }
 
         private void Thumb_OnDragDelta(object sender, DragDeltaEventArgs e)
@@ -56,7 +59,7 @@ namespace OwnCanvas
             pos.X += e.HorizontalChange;
             pos.Y += e.VerticalChange;
             node.Position = pos;
-            myCanvas.InvalidateVisual();
+            //myCanvas.InvalidateVisual();
 
         }
     }

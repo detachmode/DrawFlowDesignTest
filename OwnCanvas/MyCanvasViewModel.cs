@@ -38,7 +38,8 @@ namespace OwnCanvas
             Nodes = new ObservableCollection<Node>();
             Connections = new ObservableCollection<Connection>();
             AddNewAndConnect(0, 0, 100, 100);
-            AddNewAndConnect(100, 200, 300, 400);
+            AddNewAndConnect(100, 200, 300, 200);
+            Connections.Add(new Connection(Nodes[1], Nodes[2]));
 
 
         }
@@ -57,6 +58,8 @@ namespace OwnCanvas
         public Node End { get; set; }
 
         public string Name { get; set; }
+        public Point Center { get; set; }
+        public double AngleText { get; set; }
     }
 
 
